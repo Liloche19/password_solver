@@ -49,7 +49,7 @@ char *get_hash_from_user(char *user)
 	return hash;
 }
 
-char *get_param(char *expected)
+char *get_param(char *expected, int nb_dollar)
 {
 	int count = 0;
 	int i = 0;
@@ -58,12 +58,12 @@ char *get_param(char *expected)
 	if (expected == NULL)
 		return NULL;
 	param = strdup(expected);
-	while (count < 4 && expected[i] != '\0'){
+	while (count < nb_dollar && expected[i] != '\0'){
 		if (expected[i] == '$')
 			count++;
 		i++;
 	}
-	if (count == 4)
+	if (count == nb_dollar)
 		param[i - 1] = '\0';
 	return param;
 }
@@ -95,6 +95,19 @@ int try_size(char *mdp, char *expected, char *param, int *comb)
 	return 0;
 }
 
+int nb_dollars(char *str)
+{
+    int i = 0;
+    int count = 0;
+
+    while (str[i] != '\0'){
+        if (str[i] == '$')
+            count++;
+        i++;
+    }
+    return count;
+}
+
 int main(int argc, char **argv)
 {
 	int size = 0;
@@ -110,7 +123,7 @@ int main(int argc, char **argv)
 		return 84;
 	}
 	expected = get_hash_from_user(argv[1]);
-	param = get_param(expected);
+	param = get_param(expected, nb_dollars(expected));
 	if (param == NULL)
 		return 84;
 	while (!found){
