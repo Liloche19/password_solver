@@ -14,19 +14,17 @@ char *get_file(char *file_path)
     int fd = open(file_path, O_RDONLY);
     unsigned long size = 0;
     char *buffer;
-    struct stat *stat_file;
+    struct stat stat_file;
 
-    stat_file = malloc(sizeof(struct stat));
-    if (fd == -1 || stat_file == NULL)
+    if (fd == -1)
         return NULL;
-    if (stat(file_path, stat_file) != 0)
+    if (stat(file_path, &stat_file) != 0)
         return NULL;
-    size = stat_file->st_size;
+    size = stat_file.st_size;
     buffer = malloc(sizeof(char) * (size + 1));
-    if (read(fd, buffer, size) == -1)
+    if (buffer == NULL || read(fd, buffer, size) == -1)
         return NULL;
     buffer[size] = '\0';
-    free(stat_file);
     close(fd);
     return buffer;
 }
