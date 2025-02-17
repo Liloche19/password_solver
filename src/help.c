@@ -3,7 +3,8 @@
 
 int print_help(int argc)
 {
-    printf("Not enough argument !\n\n");
-	printf("Usage :\n\t./crack_password USER\n");
+    if (argc != 2)
+        printf("Not enough argument !\n\n");
+	printf("Usage :\t./password_solver USER\n");
     return (argc != 2) * 84;
 }
